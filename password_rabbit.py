@@ -32,7 +32,6 @@ alpha = "abcdefghijklmnopqrstuvwxyz01234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 special = "!@#$%^&*()?"
 allchar = alpha + special
 
-
 def clear():
     os.system("cls" if os.name == "nt" else "clear")
 
@@ -114,7 +113,7 @@ def dialog_qty():
         print("\n\tToo many, try again\n")
         sys.exit()
     length = dialog_length(qty)
-    spec_char = dialog_special()
+    spec_char = dialog_special(qty)
     return qty, length, spec_char
 
 def dialog_length(qty):
@@ -137,14 +136,14 @@ def dialog_length(qty):
         return
     return length
 
-def dialog_special():
+def dialog_special(qty):
     """
     Creates a dialog to ask if special characters are wanted or not.
     Use case: sometimes dumb people make apps that they can't / won't
     allow special characters.
     """
     s = input("\n\tInclude special characters? ([y]/n): ")
-    print("\n\n\tYour Passwords:\n\n")
+    print("\n\n\tYour Passwords:\n\n") if qty > 1 else None
     return False if s.lower() != 'n' else True
 
 
