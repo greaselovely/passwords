@@ -127,12 +127,11 @@ def dialog_length(qty):
     length = input(f"\n\tEnter the length of password (min:{minlength}, max:{maxlength}) [{deflength}]: ")
     try:
         length = int(length)
+        if length < minlength or length > maxlength:
+            print(f"\n\tSpecified length {length} does not meet requirements\n\n\tLength has to be between {minlength} and {maxlength}\n\n")
+            sys.exit()
     except ValueError:
         length = deflength
-
-    if length >= maxlength + 1:
-        print("\n\tToo long, try again\n")
-        sys.exit()
     return length
 
 def dialog_special(qty):
