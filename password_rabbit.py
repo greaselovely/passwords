@@ -133,7 +133,6 @@ def dialog_length(qty):
     if length >= maxlength + 1:
         print("\n\tToo long, try again\n")
         sys.exit()
-        return
     return length
 
 def dialog_special(qty):
