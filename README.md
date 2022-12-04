@@ -2,7 +2,7 @@
 
 Took that idea to create a local password generator, which is not a new, unique or clever idea, but worked it to either be called via arguments or via dialog.  It does self checks to make sure password complexity is adhered to, enforcing upper, lower, numbers and special characters.  The option of excluding special characters is provided.
 
-Password Rabbit is named after the following scripts written and renamed recently.
+Password Rabbit is named after the following scripts previously written and renamed recently.
 
 
 <hr><hr>
