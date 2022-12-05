@@ -4,18 +4,20 @@ import sys
 
 #####
 #
-minlength = 12
-maxlength = 31
-deflength = 25
-minpasswords = 0
-maxpasswords = 20
+min_length = 12
+max_length = 31
+def_length = 25
+min_qty = 0
+max_qty = 20
+file_name = "passwords.txt"
 #
 #####
 
 """
-usage: password_rabbit.py [-h] -q QTY -l LENGTH [-s] [-c]
+usage: password_rabbit.py [-h] -q QTY [-l LENGTH] [-s] [-c] [-f]
 
-Generate passwords when passed a quantity and length
+Generate passwords when passed a quantity and length. Writing to file will override other options (ie...copy)
+unless qty = 1
 
 options:
   -h, --help            show this help message and exit
@@ -24,6 +26,7 @@ options:
                         Length of password as integer
   -s, --special         Exclude special characters
   -c, --copy            Copy password to clipboard
+  -f, --file            Write passwords to file
 
 """
 
@@ -38,47 +41,43 @@ def clear():
 def qty_and_length_args():
     """
     This is called if there are arguments passed to the script via cli,
-    and assigns and returns the variables qty (int), length (int), 
+    and assigns and returns the variables qty (int), length (int),
     spec_char (True / False) and copy (True / False) to the script.
     """
-    parser = argparse.ArgumentParser(description='Generate passwords when passed a quantity and length')
+    parser = argparse.ArgumentParser(description='Generate passwords when passed a quantity and length.  Writing to file will override other options (ie...copy) unless qty = 1')
     parser.add_argument('-q', '--qty', type=int, help='Number of password to generate as integer', required=True)
-    parser.add_argument('-l', '--length', type=int, help='Length of password as integer', required=True)
+    parser.add_argument('-l', '--length', type=int, help='Length of password as integer', required=False)
     parser.add_argument('-s', '--special', action='store_true', help='Exclude special characters', required=False)
     parser.add_argument('-c', '--copy', action='store_true', help='Copy password to clipboard', required=False)
+    parser.add_argument('-f', '--file', action='store_true', help='Write passwords to file', required=False)
     args = parser.parse_args()
-    qty = args.qty if args.qty else 1
-    length = args.length if args.length else deflength
+    qty = args.qty
+    length = args.length if args.length else def_length
     spec_char = args.special
     copy = args.copy
-    return qty, length, spec_char, copy
+    file = args.file
+    return qty, length, spec_char, copy, file
 
-def gen_password(length, spec_char, qty=1):
+def gen_password(length, spec_char, file, qty=1):
     """
     Generate passwords accepting the length and qty.
-    If Qty > 1 then we build a dict; send each one as 
-    it is generated to check complexity requirements
+    send each one as it is generated to check complexity requirements
     and if return True then we add it to the dict and print
     stdout, if return False then it loops again.
     Dictionary looks like:
     { 1: "password", 2: "Password", 3: "P@55w0rd" }
     """
-    if spec_char: 
+    if spec_char:
         all = alpha # don't use special char
     else:
         all = allchar
-    if qty == 1:
-        p = "".join(random.sample(all, length))
-        return p if check_password(p, spec_char) else None
     i = 1
     while len(passwords) < qty:
         p = "".join(random.sample(all, length))
         chk = check_password(p, spec_char)
         if not chk: continue
-        print(f"\t{i}.\t{p}")
         passwords[i] = p
         i += 1
-    return
 
 def check_password(p, spec_char):
     """
@@ -101,15 +100,15 @@ def dialog_qty():
     then calls the dialog_length function for how long each password should be, and then returns both
     values so that it can be sent for password(s) generation.  If invalid characters are entered, then we
     just make some decisions based on variables above.  Right now we are giving up if they enter more than
-    the maxpasswords variable because it's not important to fight that level of dumb.
+    the max_qty variable because it's not important to fight that level of dumb.
     """
-    qty = input(f"\n\tNumber of passwords to generate (1-[{maxpasswords}]): ")
+    qty = input(f"\n\tNumber of passwords to generate (1-[{max_qty}]): ")
     try:
         qty = int(qty)
     except ValueError:
-        qty = maxpasswords
+        qty = max_qty
 
-    if qty >= maxpasswords + 1:
+    if qty >= max_qty + 1:
         print("\n\tToo many, try again\n")
         sys.exit()
     length = dialog_length(qty)
@@ -120,18 +119,18 @@ def dialog_length(qty):
     """
     Creates a dialog to respond to for the length of passwords to generate.  This function
     is called from dialog_qty function, and then returns the length.
-    If invalid characters are entered, then we just make some decisions based on variables above.  
-    Right now we are giving up if they enter more than the maxlength variable because
+    If invalid characters are entered, then we just make some decisions based on variables above.
+    Right now we are giving up if they enter more than the max_length variable because
     it's not important to fight that level of dumb.
-    """    
-    length = input(f"\n\tEnter the length of password (min:{minlength}, max:{maxlength}) [{deflength}]: ")
+    """
+    length = input(f"\n\tEnter the length of password (min:{min_length}, max:{max_length}) [{def_length}]: ")
     try:
         length = int(length)
-        if length < minlength or length > maxlength:
-            print(f"\n\tSpecified length {length} does not meet requirements\n\n\tLength has to be between {minlength} and {maxlength}\n\n")
+        if length < min_length or length > max_length:
+            print(f"\n\tSpecified length {length} does not meet requirements\n\n\tLength has to be between {min_length} and {max_length}\n\n")
             sys.exit()
     except ValueError:
-        length = deflength
+        length = def_length
     return length
 
 def dialog_special(qty):
@@ -154,7 +153,7 @@ def dialog_copy(copy, n=1):
     more = " to copy:" if copy else ":"
     if n == 1:
         p = passwords.get(n)
-        copy_pwd(p, p2c)
+        copy_pwd(p, n)
     else:
         p2c = input(f"\n\tChoose a password{more} ") # p2c = password to copy
         try:
@@ -167,11 +166,10 @@ def dialog_copy(copy, n=1):
             p = passwords.get(p2c)
         copy_pwd(p, p2c) if copy else print(f"\n\n\tYour password is: {p}\n\n")
 
-
 def copy_pwd(p, n):
     """
     we attempt to import pyperclip, if the module is not
-    installed locally, we error out and print the password to manually 
+    installed locally, we error out and print the password to manually
     copy the password.
     """
     try:
@@ -183,6 +181,13 @@ def copy_pwd(p, n):
     pyperclip.copy(p)
     print(f"\n\tPassword #{n} Copied.\n")
 
+def write_file():
+    home = os.path.expanduser('~')
+    output = os.path.join(home, file_name)
+    with open(output, 'w') as file:
+        file.write('\n'.join(list(passwords.values()))+'\n')
+    print(f"\n\tWritten to {output}\n\n")
+
 
 def main():
     clear()
@@ -191,14 +196,15 @@ def main():
     > 3; then we send it to argparse to dissect the arguments and it handles any errors
     > 1; basically errors out and sends back an abbreviated help from argparse
     finally; we create dialogs to ask what the user wants and display from variables
-    above.  The user can simply hit enter to accept all defaults and we'll handle it 
-    using try / exempt to choose for them.
+    above.  The user can simply hit enter to accept all defaults and we'll handle it
+    using try / except to choose for them.
     """
     copy = True
-    if len(sys.argv) > 3:
-        qty, length, spec_char, copy = qty_and_length_args()
-        if length < minlength or length > maxlength:
-            print(f"\n\tSpecified length {length} does not meet requirements\n\n\tLength has to be between {minlength} and {maxlength}\n\n")
+    file = False
+    if len(sys.argv) > 2:
+        qty, length, spec_char, copy, file = qty_and_length_args()
+        if length < min_length or length > max_length:
+            print(f"\n\tSpecified length {length} does not meet requirements\n\n\tLength has to be between {min_length} and {max_length}\n\n")
             sys.exit()
     elif len(sys.argv) > 1: # will simply send help to the user
         qty_and_length_args()
@@ -210,11 +216,21 @@ def main():
                 loop = False
 
     if qty == 1:
-        p = gen_password(length, spec_char, qty)
-        copy_pwd(p, 1) if copy else print(p) # to capture from stdout out let's just dump the password.
-
+        gen_password(length, spec_char, file, qty)
+        p = passwords.get(1)
+        if file:
+            write_file()
+        elif copy:
+            copy_pwd(p, 1)
+        else:
+            print(p) # to capture from stdout out let's just dump the password.
+    elif file:
+        gen_password(length, spec_char, file, qty)
+        write_file()
     else:
-        gen_password(length, spec_char, qty)
+        gen_password(length, spec_char, file, qty)
+        for i,p in passwords.items():
+            print(f"\t{i}.\t{p}")
         dialog_copy(copy, n=qty)
 
 if __name__ == "__main__":
