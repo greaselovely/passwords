@@ -82,7 +82,7 @@ def gen_password(length, spec_char, file, qty=1):
 def check_password(p, spec_char):
     """
     Complexity checking.  Each password is checked that at least one of each type of character:
-    special, upper, lower, and a number.  If not, we return None and the password
+    special, upper, lower, and a number.  If not, we return False and the password
     is effectively rejected.
     """
     if spec_char:
