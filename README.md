@@ -1,3 +1,7 @@
+# Password Marmot
+
+Rehash of Password Rabbit, using secrets.token_urlsafe as a generator, take random characters from that, replace random characters with random number and random special character, reverse it, shuffle it, and check it for complexity.  Overall my goal was to have a very random high entropy script.  I added some functionality via arguments and incorporated type hints.
+
 # Password Rabbit
 
 Took that idea to create a local password generator, which is not a new, unique or clever idea, but worked it to either be called via arguments or via dialog.  It does self checks to make sure password complexity is adhered to, enforcing upper, lower, numbers and special characters.  The option of excluding special characters is provided.
