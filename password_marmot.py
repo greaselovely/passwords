@@ -225,6 +225,11 @@ def copy_pwd(p: str, n: int) -> None:
         print(f"\n\tCan't copy to clipboard, {str(e).lower()}")
         print(f"\n\n\tYour password is: {p}\n\n")
         sys.exit()
+    except pyperclip.PyperclipException as e:
+        print(f"\n\tCan't copy to clipboard, {str(e).lower()}")
+        print(f"\n\n\tYour password is: {p}\n\n")
+        sys.exit()
+
 
 def write_file(passwords: dict) -> None:
     """
