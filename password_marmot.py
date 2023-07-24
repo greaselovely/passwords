@@ -219,12 +219,12 @@ def copy_pwd(p: str, n: int) -> None:
     """
     try:
         import pyperclip
+        pyperclip.copy(p)
+        print(f"\n\tPassword #{n} Copied.\n")
     except ImportError as e:
         print(f"\n\tCan't copy to clipboard, {str(e).lower()}")
         print(f"\n\n\tYour password is: {p}\n\n")
         sys.exit()
-    pyperclip.copy(p)
-    print(f"\n\tPassword #{n} Copied.\n")
 
 def write_file(passwords: dict) -> None:
     """
