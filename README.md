@@ -97,4 +97,6 @@ Example Output:
 
 
         Select Password to Copy: 
+        Password #1 Copied
+
 ```
