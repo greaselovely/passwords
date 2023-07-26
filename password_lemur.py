@@ -99,7 +99,22 @@ def dialog_qty() -> tuple:
     if qty >= max_qty + 1:
         print("\n\tToo many, try again\n")
         sys.exit()
-    return qty
+    num = dialog_num_of_words()
+    return qty, num
+
+def dialog_num_of_words() -> int:
+    """
+    Simply asking for number of words per passphrase.  Returns num (int)
+    """
+    num = input(f"\n\tNumber of words per passphrase (2-[{max_number_of_words}]): ")
+    try:
+        num = int(num)
+    except ValueError:
+        num = def_number_of_words
+    if num >= max_number_of_words + 1:
+        print("\n\tToo many, using defaults\n")
+        num = def_number_of_words
+    return num
 
 def dialog_copy(copy: bool, n=1) -> None:
     """
@@ -233,7 +248,7 @@ def main():
     else:
         loop = True
         while loop:
-            qty = dialog_qty()
+            qty, number_of_words = dialog_qty()
             if qty:
                 loop = False
 
