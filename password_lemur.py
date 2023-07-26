@@ -106,7 +106,7 @@ def dialog_num_of_words() -> int:
     """
     Simply asking for number of words per passphrase.  Returns num (int)
     """
-    num = input(f"\n\tNumber of words per passphrase (2-[{max_number_of_words}]): ")
+    num = input(f"\n\tNumber of words per passphrase (2-{max_number_of_words}) [{def_number_of_words}]: ")
     try:
         num = int(num)
     except ValueError:
