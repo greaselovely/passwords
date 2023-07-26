@@ -4,15 +4,13 @@ Passphrase generator with min and max number of words to generate, dynamically d
 
 Example Output:
 ```
+        1.      partying glimpsed fireproof urinal
+        2.      bambino detergent golfer inadequacy
+        3.      mediocrity revival improvised quintessential
 
-        1.      bashful boner eyeful
-        2.      detonator official cracker
-        3.      jerking quarrel rightfully
+        Choose a passphrase to copy: 
 
-        Choose a passphrase: 
-
-
-        Your password is: bashful boner eyeful
+        Password #2 Copied.
 ```
 
 # Password Marmot
