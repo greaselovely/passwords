@@ -11,9 +11,6 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 #####
 #
-# min_length = 12
-# max_length = 31
-# def_length = 25
 min_qty = 0
 max_qty = 20
 def_number_of_words = 3
