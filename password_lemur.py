@@ -187,10 +187,7 @@ def clean_word_list(word_list: list) -> list:
     for i, word in enumerate(word_list):
         if len(word) < min_word_length: continue  # I don't want short words
         try:
-            if p.singular_noun(word):
-                sanitized_word_list.append(p.singular_noun(word))
-            else:
-                sanitized_word_list.append(word)
+            sanitized_word_list.append(p.singular_noun(word)) if p.singular_noun(word) else sanitized_word_list.append(word)
         except IndexError:
             sanitized_word_list.append(word)
 
