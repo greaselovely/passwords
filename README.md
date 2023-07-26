@@ -2,6 +2,19 @@
 
 Passphrase generator with min and max number of words to generate, dynamically download, sanitize and unique values in the dictionary list.
 
+Example Output:
+```
+
+        1.      bashful boner eyeful
+        2.      detonator official cracker
+        3.      jerking quarrel rightfully
+
+        Choose a passphrase: 
+
+
+        Your password is: bashful boner eyeful
+```
+
 # Password Marmot
 
 Rehash of Password Rabbit, using secrets.token_urlsafe as a generator, take random characters from that, replace random characters with random number and random special character, reverse it, shuffle it, and check it for complexity.  Overall my goal was to have a very random high entropy script.  I added some functionality via arguments and incorporated type hints.
