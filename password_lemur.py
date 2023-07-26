@@ -1,4 +1,5 @@
-import random, os, re
+import random
+import os
 import argparse
 import sys
 import pathlib
