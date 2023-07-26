@@ -176,11 +176,11 @@ def download_word_list():
 def clean_word_list(word_list: list) -> list:
     min_word_length = 6
     """
-    Takes the word list, and removes all words in the english expletives file
-    using inflect, we take every word, and attempt to make it singular, 
+    Takes the word list, and removes all words in the english expletives file.
+    Using inflect, we take every word, and attempt to make it singular, 
     and add to the new list.
-    if inflect returns False, then we just add the word to new the list as it 
-    Then it takes the list and makes a new unique valued list and then sorts it
+    If inflect returns False, then we just add the word to new the list as it is.
+    Then it takes the list and makes a new unique valued list and then sorts it.
     We then overwrite the dictionary file for future use.
     """
     with open(expletive_full_path, 'r') as f:
