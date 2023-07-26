@@ -27,20 +27,18 @@ word_list_url = "https://github.com/dolph/dictionary/raw/master/popular.txt"
 #####
 
 """
-usage: password_marmot.py [-h] -q QTY [-l LENGTH] [-s] [-c] [-f] [-o]
+usage: passphrase_lemur.py [-h] -q QTY [-n NUM] [-c] [-f] [-o]
 
-Generate passphrases when passed a quantity and length. Writing to file will override
-other options (ie...copy) unless qty = 1
+Generate passphrases when passed a quantity. Writing to file will override other options
+(ie...copy) unless qty = 1
 
 options:
-  -h, --help            show this help message and exit
-  -q QTY, --qty QTY     Number of password to generate as integer
-  -l LENGTH, --length LENGTH
-                        Length of password as integer
-  -s, --no_special         Exclude special characters
-  -c, --copy            Copy password to clipboard
-  -f, --file            Write passphrases to file
-  -o, --obfuscate       Obfuscates password output to stdout
+  -h, --help         show this help message and exit
+  -q QTY, --qty QTY  Number of passphrases to generate
+  -n NUM, --num NUM  Number of words to use for passphrase
+  -c, --copy         Copy passphrase to clipboard
+  -f, --file         Write passphrases to file
+  -o, --obfuscate    Obfuscates passphrase output to stdout
 
 """
 
@@ -74,7 +72,7 @@ def argue_with_me() -> tuple:
     number_of_words = 3 if not args.num else args.num
     return number_of_words, qty, copy, file, obfuscate
 
-def gen_password(word_list: list, file: bool, number_of_words: int, qty=1) -> None:
+def gen_passphrase(word_list: list, file: bool, number_of_words: int, qty=1) -> None:
     """
     Generate passphrases using the word list provided.
     Dictionary looks like:
@@ -91,8 +89,8 @@ def dialog_qty() -> tuple:
     """
     Entry point for all dialogs and returns all results
     Creates a dialog to respond to for the number of passphrases to generate.  This function
-    then calls the dialog_length function for how long each password should be, and then returns both
-    values so that it can be sent for password(s) generation.  If invalid characters are entered, then we
+    then calls the dialog_length function for how long each passphrase should be, and then returns both
+    values so that it can be sent for passphrase(s) generation.  If invalid characters are entered, then we
     just make some decisions based on variables above.  Right now we are giving up if they enter more than
     the max_qty variable because it's not important to fight that level of dumb.
     """
@@ -108,7 +106,7 @@ def dialog_qty() -> tuple:
 
 def dialog_copy(copy: bool, n=1) -> None:
     """
-    Creates a dialog to respond to for the password to copy to the clipboard.
+    Creates a dialog to respond to for the passphrase to copy to the clipboard.
     If invalid characters are entered we simple choose a random integer between
     1 and the length of the passphrases word_list and then call copy_pwd.
     """
@@ -117,7 +115,7 @@ def dialog_copy(copy: bool, n=1) -> None:
         p = passphrases.get(n)
         copy_pwd(p, n)
     else:
-        p2c = input(f"\n\tChoose a passphrase{more} ") # p2c = password to copy
+        p2c = input(f"\n\tChoose a passphrase{more} ") # p2c = passphrase to copy
         try:
             p2c = int(p2c)
         except ValueError:
@@ -126,25 +124,25 @@ def dialog_copy(copy: bool, n=1) -> None:
         if p == None:
             p2c = random.randint(1, len(passphrases))
             p = passphrases.get(p2c)
-        copy_pwd(p, p2c) if copy else print(f"\n\n\tYour password is: {p}\n\n")
+        copy_pwd(p, p2c) if copy else print(f"\n\n\tYour passphrase is: {p}\n\n")
 
 def copy_pwd(p: str, n: int) -> None:
     """
     we attempt to import pyperclip, if the module is not
-    installed locally, we error out and print the password to manually
-    copy the password.
+    installed locally, we error out and print the passphrase to manually
+    copy the passphrase.
     """
     try:
         import pyperclip
         pyperclip.copy(p)
-        print(f"\n\tPassword #{n} Copied.\n")
+        print(f"\n\tPassphrase #{n} Copied.\n")
     except ImportError as e:
         print(f"\n\tCan't copy to clipboard,n\t{str(e).lower()}")
-        print(f"\n\n\tYour password is: {p}\n\n")
+        print(f"\n\n\tYour passphrase is: {p}\n\n")
         sys.exit()
     except pyperclip.PyperclipException as e:
         print(f"\n\tCan't copy to clipboard,\n\t\t{str(e).lower()}")
-        print(f"\n\n\tYour password is: {p}\n\n")
+        print(f"\n\n\tYour passphrase is: {p}\n\n")
         sys.exit()
 
 def write_file(passphrases: dict) -> None:
@@ -202,7 +200,7 @@ def clean_word_list(word_list: list) -> list:
 def main():
     clear()
     """
-    This one is used to create a passphrase instead of a complex password.
+    This one is used to create a passphrase instead of a complex passphrase.
 
     It downloads a list from github, sanitizes it of expletives, and writes the new file.
 
@@ -250,16 +248,16 @@ def main():
         print(f"\n\n\tMinimum number of words is {min_number_of_words}, using default of {number_of_words}\n\n")
 
     if qty == 1:
-        gen_password(word_list, file, number_of_words)
+        gen_passphrase(word_list, file, number_of_words)
         p = passphrases.get(1)
         if copy:
             copy_pwd(p, 1)
         else:
-            print(p if not file else '') # to capture from stdout out let's just dump the password.
+            print(p if not file else '') # to capture from stdout out let's just dump the passphrase.
     elif file:
-        gen_password(word_list, file, number_of_words, qty)
+        gen_passphrase(word_list, file, number_of_words, qty)
     else:
-        gen_password(word_list, file, number_of_words, qty)
+        gen_passphrase(word_list, file, number_of_words, qty)
         print()
         for i,p in passphrases.items():
             print(f"\t{i}.\t{p if not obfuscate else '*' * len(p)}")
