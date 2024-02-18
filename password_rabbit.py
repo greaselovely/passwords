@@ -88,7 +88,7 @@ def check_password(p, spec_char):
     if spec_char:
         s = re.compile("")
     else:
-        s = re.compile("[\~\!\@\#\$\%\^\&\*\(\)\_\+\-\=\{\}\|\[\]\\\:\;\'\<\>\?\,\.\/\*]") # special
+        s = re.compile(r"[\~\!\@\#\$\%\^\&\*\(\)\_\+\-\=\{\}\|\[\]\\\:\;\'\<\>\?\,\.\/\*]") # special
     l = re.compile("[a-z]") # lower
     u = re.compile("[A-Z]") # upper
     n = re.compile("[0-9]") # numbers
