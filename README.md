@@ -1,3 +1,18 @@
+# Password Genut
+
+Passphrase generator with min and max number of words to generate using Password Wolf's password phonetic that is provided via API
+
+Example Output:
+```
+        1.      nine xray QUEBEC four BRAVO INDIA at six
+        2.      charlie dot five five golf pappa comma XRAY
+        3.      five seven question-mark yankee GOLF BRAVO tango left-paren
+
+        Choose a passphrase to copy: 
+
+        Passphrase #2 Copied.
+```
+
 # Password Lemur
 
 Passphrase generator with min and max number of words to generate, dynamically download, sanitize and unique values in the dictionary list.
