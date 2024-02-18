@@ -169,7 +169,7 @@ def dialog_length(qty: int) -> int:
     Right now we are giving up if they enter more than the max_length variable because
     it's not important to fight that level of dumb.
     """
-    length = input(f"\n\tEnter the length of password (min:{min_length}, max:{max_length}) [{def_length}]: ")
+    length = input(f"\n\tEnter the length of password ({min_length}-{max_length}) [{def_length}]: ")
     try:
         length = int(length)
         if length < min_length or length > max_length:
