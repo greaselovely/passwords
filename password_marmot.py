@@ -34,7 +34,7 @@ options:
 """
 
 passwords = {}
-special = "!@#$%^&*()?"
+special = r"!@#$%^&*()?"
 numbers = "0123456789"
 
 def clear() -> None:
@@ -133,7 +133,7 @@ def check_password(pwd: str, spec_char: bool) -> bool:
     if spec_char:
         s = re.compile("")
     else:
-        s = re.compile("[\~\!\@\#\$\%\^\&\*\(\)\_\+\-\=\{\}\|\[\]\\\:\;\'\<\>\?\,\.\/\*]") # special
+        s = re.compile(r"[\~\!\@\#\$\%\^\&\*\(\)\_\+\-\=\{\}\|\[\]\\\:\;\'\<\>\?\,\.\/\*]") # special
     l = re.compile("[a-z]") # lower
     u = re.compile("[A-Z]") # upper
     n = re.compile("[0-9]") # numbers
